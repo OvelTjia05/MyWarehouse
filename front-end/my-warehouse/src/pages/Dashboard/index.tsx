@@ -9,6 +9,7 @@ import axios from "axios";
 import { API } from "../../config";
 import { NoImage } from "../../assets/images";
 import UpdateToken from "../../config/UpdateToken";
+import EditItem from "../../components/modal/EditItem";
 
 type Items = {
   id: string;
@@ -29,8 +30,10 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<Items[]>([]);
   const [selectedItem, setSelectedItem] = useState<string[]>([]);
+  const [clickeditem, setClickedItem] = useState<Items | null>(null);
   const [openModalUnit, setOpenModalUnit] = useState(false);
   const [openModalUnit1, setOpenModalUnit1] = useState(false);
+  const [openModalUnit2, setOpenModalUnit2] = useState(false);
 
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -97,6 +100,13 @@ const Dashboard = () => {
     getItem();
   }, []);
 
+  useEffect(() => {
+    console.log("ssc", clickeditem);
+    if (clickeditem) {
+      setOpenModalUnit2(true);
+    }
+  }, [clickeditem]);
+
   return (
     <div className="min-h-screen p-4">
       <Loading status={isLoading} />
@@ -135,10 +145,16 @@ const Dashboard = () => {
                   <th>Updated At</th>
                 </tr>
               </thead>
-              {items && items.length ? ( // Check apakah items tidak kosong
+              {items && items.length ? (
                 <tbody>
                   {items.map((item) => (
-                    <tr key={item.id}>
+                    <tr
+                      key={item.id}
+                      onDoubleClick={() => {
+                        setClickedItem(item);
+                      }}
+                      className="hover:outline outline-primary cursor-pointer"
+                    >
                       <th>
                         <label>
                           <input
@@ -251,6 +267,11 @@ const Dashboard = () => {
       <Additem
         isVisible={openModalUnit1}
         onClose={() => setOpenModalUnit1(false)}
+      />
+      <EditItem
+        isVisible={openModalUnit2}
+        onClose={() => setOpenModalUnit2(false)}
+        data={clickeditem}
       />
     </div>
   );
