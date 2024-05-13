@@ -45,27 +45,6 @@ const createItemByIdUser = async (req, res) => {
       throw new NotFoundError("User is not found");
     }
 
-    // console.log('ini req file loh: ', req.file);
-    let url;
-    if (req.file) {
-      const file = req.file;
-
-      // simpan gambaer ke folder
-      const imageData = req.file.buffer;
-
-      // Menentukan folder tempat untuk menyimpan gambar
-      const folderPath = path.join(__dirname, "..", "..", "public", "images");
-
-      // Membuat nama file untuk gambar
-      const arrayNewFileName = file.originalname.split(".");
-      const fileName =
-        arrayNewFileName[0] + "-" + Date.now() + "." + arrayNewFileName[1];
-
-      fs.writeFileSync(path.join(folderPath, fileName), imageData);
-
-      url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
-    }
-
     // insert item ke database
     const item = await prisma.item.create({
       data: {
@@ -76,7 +55,6 @@ const createItemByIdUser = async (req, res) => {
         qty: parseFloat(req.body.qty),
         description: req.body.description,
         location: req.body.location,
-        picture: url ? url : null,
       },
     });
 
@@ -202,38 +180,6 @@ const updateItemByIdItem = async (req, res) => {
       unit = isUnit.name;
     }
 
-    // jika ada gambar
-    let url;
-    console.log(req.file);
-    if (req.file) {
-      const file = req.file;
-
-      // cek jika di tabel ada gambar
-      if (isItem.picture) {
-        // hapus gambar sebelumnya
-        const parts = isItem.picture.split("/");
-        const fileName = parts[parts.length - 1];
-        const filePath = path.join("public", "images", fileName);
-        fs.unlinkSync(filePath);
-      }
-
-      // simpan gambaer ke folder
-      const imageData = req.file.buffer;
-
-      // Menentukan folder tempat untuk menyimpan gambar
-      const folderPath = path.join(__dirname, "..", "..", "public", "images");
-
-      // Membuat nama file untuk gambar
-      const arrayNewFileName = file.originalname.split(".");
-      const fileName =
-        arrayNewFileName[0] + "-" + Date.now() + "." + arrayNewFileName[1];
-
-      fs.writeFileSync(path.join(folderPath, fileName), imageData);
-
-      // assign url gambar baru
-      url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
-    }
-
     // update to database
     await prisma.item.update({
       where: {
@@ -246,7 +192,6 @@ const updateItemByIdItem = async (req, res) => {
         qty: req.body.qty ? parseFloat(req.body.qty) : undefined,
         description: req.body.description,
         location: req.body.location,
-        picture: url ? url : isItem.picture,
       },
     });
 
@@ -286,16 +231,6 @@ const deleteItemByIdItem = async (req, res) => {
     if (isItems.length !== id_items.length) {
       throw new NotFoundError("Beberapa id items tidak ditemukan");
     }
-
-    // hapus gambar
-    isItems.forEach((item) => {
-      if (item.picture) {
-        const parts = item.picture.split("/");
-        const fileName = parts[parts.length - 1];
-        const filePath = path.join("public", "images", fileName);
-        fs.unlinkSync(filePath);
-      }
-    });
 
     // hapus item tersebut di database
     await prisma.item.deleteMany({

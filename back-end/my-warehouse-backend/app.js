@@ -11,7 +11,7 @@ const unitRouter = require("./app/unit/router");
 const itemRouter = require("./app/item/router");
 
 const app = express();
-
+console.log("aaa");
 app.use(
   cors({
     origin: "*",
