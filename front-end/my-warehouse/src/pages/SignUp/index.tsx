@@ -47,6 +47,7 @@ const SignUp = () => {
       setIsLoading(true);
       console.log(API);
       console.log("form signup", e);
+      console.log("ini api: ", API);
       const response = await axios.post(
         `${API}/authentication/register`,
         {
