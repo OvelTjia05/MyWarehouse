@@ -32,7 +32,16 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route
+          path="/"
+          element={
+            getAuthToken() ? (
+              <Navigate to={"/app/dashboard"} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/app/*" element={<PrivateRoute element={<Sidebar />} />} />
