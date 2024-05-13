@@ -266,7 +266,10 @@ const Dashboard = () => {
       />
       <Additem
         isVisible={openModalUnit1}
-        onClose={() => setOpenModalUnit1(false)}
+        onClose={() => {
+          setOpenModalUnit1(false);
+          getItem();
+        }}
       />
       <EditItem
         isVisible={openModalUnit2}
