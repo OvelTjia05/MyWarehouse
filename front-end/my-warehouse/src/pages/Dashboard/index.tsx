@@ -226,9 +226,9 @@ const Dashboard = () => {
                   <p>Edited</p>
                 </div>
                 <div className="">
-                  <p className="">23</p>
-                  <p className="">23</p>
-                  <p className="">23</p>
+                  <p className="">0</p>
+                  <p className="">0</p>
+                  <p className="">0</p>
                 </div>
               </div>
             </div>
