@@ -35,7 +35,6 @@ const Login = () => {
       setIsLoading(true);
       const response = await axios.post(`${API}/authentication/login`, e);
 
-      // console.log("resp login", response);
       const { status, data } = response.data;
 
       if (status === "success") {
