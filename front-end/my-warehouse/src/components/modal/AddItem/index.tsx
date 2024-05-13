@@ -58,24 +58,12 @@ const Additem: React.FC<{ isVisible: boolean; onClose: Function }> = ({
         formData.append("picture", image);
       }
 
-      const response = await axios.post(
-        `${API}/item/${id}`,
-        formData,
-        // {
-        //   name: e.name,
-        //   id_unit: e.id_unit,
-        //   picture: e.picture === "" ? null : e.picture,
-        //   qty: e.qty,
-        //   location: e.location,
-        //   description: e.description,
-        // },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(`${API}/item/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       console.log("ccc", formData);
       console.log("resp additem", response);
 
